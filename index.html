@@ -24,10 +24,30 @@ button{font:inherit;border:0;cursor:pointer;border-radius:18px;padding:13px 18px
 .snake-help{font-size:14px;line-height:1.8;color:#716781}
 
 @media(max-width:650px){.hero{grid-template-columns:1fr;text-align:center}.mascot{order:-1}.tiles{grid-template-columns:repeat(2,1fr)}.letters{grid-template-columns:repeat(5,1fr)}.gallery{grid-template-columns:repeat(2,1fr)}header{padding:12px 4%}}
+
+/* الوضع الليلي لمملكة دعد */
+body.dark-mode{background:linear-gradient(135deg,#171426,#22203a 55%,#172b3b);color:#f5efff}
+body.dark-mode header{background:#211d35ee;border-bottom-color:#403653}
+body.dark-mode .panel{background:#29243d;color:#f5efff;box-shadow:0 8px 24px #0004}
+body.dark-mode .learn-card{background:#382b46;color:#fff0f7}
+body.dark-mode .game-area{background:#393247;color:#fff4d5}
+body.dark-mode .pic{background:#38314d;color:#fff}
+body.dark-mode .letter,body.dark-mode .number{background:#403653;color:#fff}
+body.dark-mode .letter.selected,body.dark-mode .number.selected{background:#754b70;outline-color:#e7a8d0}
+body.dark-mode .tile{filter:brightness(.78) saturate(.85);color:#30243d}
+body.dark-mode button:not(.primary){background:#403653;color:#fff;box-shadow:0 4px 0 #211b30}
+body.dark-mode .primary{background:#9c83d8;color:#fff}
+body.dark-mode .snake-wrap{background:linear-gradient(135deg,#263e36,#39304e)}
+body.dark-mode .snake-help,body.dark-mode .small{color:#d2c7e5}
+body.dark-mode footer{color:#c9bedb}
+#themeToggle{white-space:nowrap;font-size:16px;padding:10px 14px;background:#f1eaff;color:#594477;box-shadow:0 3px 0 #d9cadd}
+body.dark-mode #themeToggle{background:#403653;color:#fff;box-shadow:0 3px 0 #211b30}
+@media(max-width:420px){#themeToggle{font-size:14px;padding:9px 10px}.stars{font-size:18px}}
+
 </style>
 </head>
 <body>
-<header><div class="logo">👑 مملكة دعد</div><div class="stars">⭐ <b id="score">0</b></div></header>
+<header><div class="logo">👑 مملكة دعد</div><div style="display:flex;align-items:center;gap:10px"><button id="themeToggle" type="button" onclick="toggleTheme()" aria-label="تبديل الوضع الليلي">🌙 الوضع الليلي</button><div class="stars">⭐ <b id="score">0</b></div></div></header>
 <main>
 <section class="hero"><div><h1>أهلاً يا دعد! 🌸</h1><p>أنا ماشا وصديقي الدب، تعالي نلعب ونتعلم ونكتشف أشياء جميلة في مملكتك!</p><button class="primary" onclick="openPanel('letters')">هيا نتعلم! ✨</button></div><div class="mascot" aria-label="ماشا والدب">👧🏻 🧸</div></section>
 <h2 class="section-title">ماذا نلعب اليوم؟</h2>
@@ -71,6 +91,20 @@ button{font:inherit;border:0;cursor:pointer;border-radius:18px;padding:13px 18px
 const letters=[['أ','أسد','🦁'],['ب','بطة','🦆'],['ت','تفاحة','🍎'],['ث','ثعلب','🦊'],['ج','جمل','🐪'],['ح','حصان','🐴'],['خ','خروف','🐑'],['د','دب','🐻'],['ذ','ذرة','🌽'],['ر','ريشة','🪶'],['ز','زهرة','🌸'],['س','سمكة','🐟'],['ش','شمس','☀️'],['ص','صقر','🦅'],['ض','ضفدع','🐸'],['ط','طائرة','✈️'],['ظ','ظرف','✉️'],['ع','عنب','🍇'],['غ','غيمة','☁️'],['ف','فراشة','🦋'],['ق','قمر','🌙'],['ك','كتاب','📘'],['ل','ليمون','🍋'],['م','موز','🍌'],['ن','نجمة','⭐'],['هـ','هلال','🌙'],['و','وردة','🌹'],['ي','يد','✋']];
 let score=Number(localStorage.getItem('daadStars')||0),currentLetter=letters[0];
 const $=id=>document.getElementById(id);
+
+/* حفظ اختيار الوضع الليلي على نفس الجهاز */
+function applyTheme(mode){
+ document.body.classList.toggle('dark-mode',mode==='dark');
+ const btn=$('themeToggle');
+ if(btn){btn.textContent=mode==='dark'?'☀️ الوضع النهاري':'🌙 الوضع الليلي';btn.setAttribute('aria-pressed',mode==='dark');}
+ const meta=document.querySelector('meta[name="theme-color"]');
+ if(meta)meta.setAttribute('content',mode==='dark'?'#211d35':'#f7c9df');
+}
+function toggleTheme(){
+ const next=document.body.classList.contains('dark-mode')?'light':'dark';
+ localStorage.setItem('daadTheme',next);applyTheme(next);
+}
+
 function updateScore(){ $('score').textContent=score;$('scoreBig').textContent=score;localStorage.setItem('daadStars',score)}
 function star(){score++;updateScore()}
 function speak(t){if('speechSynthesis'in window){speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='ar-SA';u.rate=.75;speechSynthesis.speak(u)}}
@@ -111,5 +145,6 @@ function resetSnake(){pauseSnake();snakeBody=[{x:9,y:10},{x:8,y:10},{x:7,y:10}];
 document.addEventListener('keydown',e=>{if(!$('snake').classList.contains('active'))return;const keys={ArrowUp:[0,-1],w:[0,-1],W:[0,-1],ArrowDown:[0,1],s:[0,1],S:[0,1],ArrowLeft:[-1,0],a:[-1,0],A:[-1,0],ArrowRight:[1,0],d:[1,0],D:[1,0]};if(keys[e.key]){e.preventDefault();setSnakeDirection(...keys[e.key])}});
 snakeBestScore=Number(localStorage.getItem('daadSnakeBest')||0);snakePlaceFood();drawSnake();
 
+applyTheme(localStorage.getItem('daadTheme')||'light');
 colorGame();updateScore();
 </script></body></html>
