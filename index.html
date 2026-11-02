@@ -14,6 +14,15 @@ h1{font-size:clamp(30px,5vw,48px);margin:0 0 10px}.hero p{font-size:20px;line-he
 button{font:inherit;border:0;cursor:pointer;border-radius:18px;padding:13px 18px;background:white;color:var(--ink);font-weight:bold;box-shadow:0 4px 0 #d9cadd;transition:.15s}button:hover{transform:translateY(-2px)}button:active{transform:translateY(2px);box-shadow:none}.primary{background:#9b83d5;color:white}.section-title{font-size:27px;margin:30px 4px 14px}
 .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.tile{min-height:130px;border-radius:24px;padding:18px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:20px}.tile span{font-size:42px}.tile:nth-child(1){background:#ffe3ef}.tile:nth-child(2){background:#e7e1ff}.tile:nth-child(3){background:#dcf3fa}.tile:nth-child(4){background:#fff0c7}.tile:nth-child(5){background:#dff3df}.tile:nth-child(6){background:#f4e4ff}
 .panel{display:none;margin-top:22px;background:white;border-radius:26px;padding:20px;box-shadow:0 8px 24px #685b7714}.panel.active{display:block}.panel h2{margin-top:0}.letters{display:grid;grid-template-columns:repeat(7,1fr);gap:9px}.letter,.number{background:#f3edff;border-radius:16px;min-height:65px;font-size:34px;color:#64518b;box-shadow:none}.letter.selected,.number.selected{background:#ffe0ec;outline:3px solid #e8a9c7}.learn-card{margin:18px auto 0;max-width:440px;text-align:center;background:#fff5fa;border-radius:24px;padding:22px}.big{font-size:100px;line-height:1.2;font-weight:900}.learn-card p{font-size:22px}.numbers{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.number{font-size:48px;min-height:78px;background:#e5f5fb}.game-area{background:#fff7df;border-radius:22px;padding:20px;text-align:center;margin-top:12px}.choices{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:15px}.choice{font-size:30px;min-width:75px}.feedback{font-size:21px;font-weight:bold;min-height:34px;margin:10px}.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.pic{font-size:60px;background:#f6f1ff;border-radius:20px;padding:18px;text-align:center}.small{font-size:14px;color:#887d99}footer{text-align:center;padding:25px;color:#8b8197}
+
+.snake-wrap{background:linear-gradient(135deg,#e4f7e9,#e8e2ff);border-radius:24px;padding:16px;text-align:center}
+.snake-top{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;font-size:18px;font-weight:bold;margin:8px}
+#snakeCanvas{display:block;width:min(100%,440px);height:auto;aspect-ratio:1;margin:12px auto;border:5px solid #fff;border-radius:18px;background:#fafff6;touch-action:none;box-shadow:0 5px 18px #685b7720}
+.snake-controls{display:grid;grid-template-columns:repeat(3,62px);grid-template-rows:repeat(2,52px);gap:7px;justify-content:center;margin:12px auto}
+.snake-controls button{padding:5px;font-size:23px;background:#fff}
+.snake-controls .up{grid-column:2}.snake-controls .left{grid-column:1;grid-row:2}.snake-controls .down{grid-column:2;grid-row:2}.snake-controls .right{grid-column:3;grid-row:2}
+.snake-help{font-size:14px;line-height:1.8;color:#716781}
+
 @media(max-width:650px){.hero{grid-template-columns:1fr;text-align:center}.mascot{order:-1}.tiles{grid-template-columns:repeat(2,1fr)}.letters{grid-template-columns:repeat(5,1fr)}.gallery{grid-template-columns:repeat(2,1fr)}header{padding:12px 4%}}
 </style>
 </head>
@@ -29,12 +38,32 @@ button{font:inherit;border:0;cursor:pointer;border-radius:18px;padding:13px 18px
 <button class="tile" onclick="openPanel('colors')"><span>🎨</span>ألواني الجميلة</button>
 <button class="tile" onclick="openPanel('gallery')"><span>🦋</span>معرض الصور</button>
 <button class="tile" onclick="openPanel('achievements')"><span>🏆</span>نجومي وإنجازاتي</button>
+<button class="tile" onclick="openPanel('snake')"><span>🐍</span>ثعبان نوكيا</button>
 </section>
 <section id="letters" class="panel"><h2>🌷 حديقة الحروف العربية</h2><p>اختاري حرفاً، ثم اضغطي على زر الاستماع.</p><div class="letters" id="letterGrid"></div><div class="learn-card"><div class="big" id="letterBig">أ</div><p id="letterWord">أ مثل أسد 🦁</p><button class="primary" onclick="speak(document.getElementById('letterBig').textContent)">🔊 اسمعي الحرف</button></div></section>
 <section id="numbers" class="panel"><h2>🌈 مملكة الأرقام من ١ إلى ١٠</h2><div class="numbers" id="numberGrid"></div><div class="learn-card"><div class="big" id="numberBig">١</div><p id="countThings">🍓</p><button class="primary" onclick="speak(document.getElementById('numberBig').textContent)">🔊 اسمعي الرقم</button></div></section>
 <section id="game" class="panel"><h2>🧠 لعبة اختاري الحرف</h2><p>ما الحرف الذي تبدأ به كلمة <b id="gameWord">تفاحة 🍎</b>؟</p><div class="game-area"><div class="choices" id="gameChoices"></div><div class="feedback" id="feedback"></div><button class="primary" onclick="newGame()">سؤال جديد 🎲</button></div></section>
 <section id="colors" class="panel"><h2>🎨 لعبة الألوان</h2><p>اضغطي على اللون الذي أطلبه منك.</p><div class="game-area"><div id="colorAsk" style="font-size:24px;font-weight:bold">أين اللون الأحمر؟</div><div class="choices" id="colorChoices"></div><div class="feedback" id="colorFeedback"></div></div></section>
 <section id="gallery" class="panel"><h2>🦋 معرض دعد الجميل</h2><div class="gallery"><div class="pic">🦋<div class="small">فراشة</div></div><div class="pic">🐱<div class="small">قطة</div></div><div class="pic">🌷<div class="small">وردة</div></div><div class="pic">🍓<div class="small">فراولة</div></div><div class="pic">🐰<div class="small">أرنب</div></div><div class="pic">🌈<div class="small">قوس قزح</div></div><div class="pic">🐻<div class="small">دب</div></div><div class="pic">🐥<div class="small">كتكوت</div></div><div class="pic">⭐<div class="small">نجمة</div></div></div></section>
+
+<section id="snake" class="panel">
+<h2>🐍 لعبة الثعبان — إصدار دعد</h2>
+<p>اجمعي الفواكه وكبّري الثعبان! وعندما يصل إلى الجدار سيخرج من الجهة الثانية. انتبهي: لا تلمسي جسم الثعبان.</p>
+<div class="snake-wrap">
+<div class="snake-top"><span>🍎 النقاط: <b id="snakeScore">0</b></span><span>🏆 أفضل نتيجة: <b id="snakeBest">0</b></span></div>
+<canvas id="snakeCanvas" width="400" height="400" aria-label="لوحة لعبة الثعبان"></canvas>
+<div><button class="primary" id="snakeStart" onclick="startSnake()">ابدئي اللعب ▶️</button> <button onclick="pauseSnake()">إيقاف مؤقت ⏸️</button> <button onclick="resetSnake()">إعادة 🔄</button></div>
+<div class="snake-controls" aria-label="أزرار الاتجاهات">
+<button class="up" onclick="setSnakeDirection(0,-1)" aria-label="أعلى">⬆️</button>
+<button class="left" onclick="setSnakeDirection(-1,0)" aria-label="يسار">⬅️</button>
+<button class="down" onclick="setSnakeDirection(0,1)" aria-label="أسفل">⬇️</button>
+<button class="right" onclick="setSnakeDirection(1,0)" aria-label="يمين">➡️</button>
+</div>
+<div class="snake-help">الكمبيوتر: الأسهم أو W A S D — الجوال: أزرار الاتجاهات أعلاه.<br>ميزة اللعبة: عبور الجدران مسموح من الجهات الأربع! 🌀</div>
+<div class="feedback" id="snakeMessage">اضغطي «ابدئي اللعب» عندما تكونين مستعدة 💗</div>
+</div>
+</section>
+
 <section id="achievements" class="panel"><h2>🏆 نجومي يا دعد</h2><p style="font-size:22px">جمعتِ حتى الآن <b id="scoreBig">0</b> نجمة ⭐</p><p>كلما تعلمتِ حرفاً أو أجبتِ إجابة صحيحة، تحصلين على نجمة جديدة!</p></section>
 <footer>صُنعت بحب لدعد 💗 <div class="small">مملكة دعد — نسخة أولى تعليمية، تعمل دون حساب أو إرسال بيانات.</div></footer>
 </main>
@@ -53,5 +82,34 @@ nums.forEach((n,i)=>{let b=document.createElement('button');b.className='number'
 function newGame(){let target=Math.floor(Math.random()*letters.length);let opts=new Set([target]);while(opts.size<3)opts.add(Math.floor(Math.random()*letters.length));$('gameWord').textContent=letters[target][1]+' '+letters[target][2];$('feedback').textContent='';$('gameChoices').innerHTML='';[...opts].sort(()=>Math.random()-.5).forEach(i=>{let b=document.createElement('button');b.className='choice';b.textContent=letters[i][0];b.onclick=()=>{if(i===target){$('feedback').textContent='أحسنتِ يا دعد! ⭐';star();speak('أحسنت يا دعد')}else $('feedback').textContent='حاولي مرة أخرى يا بطلة 💗'};$('gameChoices').appendChild(b)})}
 const colors=[['الأحمر','🔴'],['الأزرق','🔵'],['الأصفر','🟡'],['الأخضر','🟢']];
 function colorGame(){let t=Math.floor(Math.random()*4);$('colorAsk').textContent='أين اللون '+colors[t][0]+'؟';$('colorFeedback').textContent='';$('colorChoices').innerHTML='';colors.forEach((c,i)=>{let b=document.createElement('button');b.className='choice';b.textContent=c[1];b.onclick=()=>{if(i===t){$('colorFeedback').textContent='رائعة! ⭐';star();colorGame()}else $('colorFeedback').textContent='جربي لوناً آخر 🌷'};$('colorChoices').appendChild(b)})}
+
+/* لعبة الثعبان: عبور الجدران مع منع الاصطدام بالنفس */
+const snakeCanvas=$('snakeCanvas'),snakeCtx=snakeCanvas.getContext('2d'),snakeCells=20;
+let snakeBody=[{x:9,y:10},{x:8,y:10},{x:7,y:10}],snakeDir={x:1,y:0},snakeNext={x:1,y:0};
+let snakeFood={x:14,y:10},snakeTimer=null,snakePoints=0,snakeRunning=false,snakeEnded=false;
+let snakeBestScore=Number(localStorage.getItem('daadSnakeBest')||0);
+function snakePlaceFood(){let p;do{p={x:Math.floor(Math.random()*snakeCells),y:Math.floor(Math.random()*snakeCells)}}while(snakeBody.some(s=>s.x===p.x&&s.y===p.y));snakeFood=p}
+function drawSnake(){
+ const c=snakeCtx;c.clearRect(0,0,400,400);c.fillStyle='#fafff6';c.fillRect(0,0,400,400);
+ c.strokeStyle='#eaf2e7';c.lineWidth=1;for(let i=0;i<=400;i+=20){c.beginPath();c.moveTo(i,0);c.lineTo(i,400);c.stroke();c.beginPath();c.moveTo(0,i);c.lineTo(400,i);c.stroke()}
+ c.font='18px sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText('🍎',snakeFood.x*20+10,snakeFood.y*20+10);
+ snakeBody.forEach((s,i)=>{c.fillStyle=i===0?'#5baf75':'#8bd49c';c.beginPath();c.roundRect(s.x*20+1,s.y*20+1,18,18,6);c.fill();if(i===0){c.fillStyle='#fff';c.beginPath();c.arc(s.x*20+7,s.y*20+7,2,0,7);c.arc(s.x*20+14,s.y*20+7,2,0,7);c.fill()}});
+ $('snakeScore').textContent=snakePoints;$('snakeBest').textContent=snakeBestScore;
+}
+function setSnakeDirection(x,y){if(x===-snakeDir.x&&y===-snakeDir.y)return;snakeNext={x,y}}
+function snakeStep(){
+ snakeDir=snakeNext;let head={x:(snakeBody[0].x+snakeDir.x+snakeCells)%snakeCells,y:(snakeBody[0].y+snakeDir.y+snakeCells)%snakeCells};
+ const eating=head.x===snakeFood.x&&head.y===snakeFood.y;
+ const bodyToCheck=eating?snakeBody:snakeBody.slice(0,-1);
+ if(bodyToCheck.some(s=>s.x===head.x&&s.y===head.y)){endSnake();return}
+ snakeBody.unshift(head);if(eating){snakePoints+=10;if(snakePoints>snakeBestScore){snakeBestScore=snakePoints;localStorage.setItem('daadSnakeBest',snakeBestScore)}star();snakePlaceFood();speak('أحسنت يا دعد')}else snakeBody.pop();drawSnake()
+}
+function startSnake(){if(snakeRunning)return;if(snakeEnded)resetSnake();snakeRunning=true;$('snakeMessage').textContent='يلا يا دعد! اجمعي التفاح 🍎';$('snakeStart').textContent='اللعب مستمر 🐍';snakeTimer=setInterval(snakeStep,155)}
+function pauseSnake(){if(snakeTimer)clearInterval(snakeTimer);snakeTimer=null;snakeRunning=false;$('snakeStart').textContent='متابعة ▶️';$('snakeMessage').textContent='استراحة صغيرة؟ اضغطي متابعة 💗'}
+function endSnake(){pauseSnake();snakeEnded=true;$('snakeStart').textContent='العبِي مرة أخرى';$('snakeMessage').textContent='انتهت الجولة! نتيجتك '+snakePoints+' نقطة. أحسنتِ يا بطلة! 🌟'}
+function resetSnake(){pauseSnake();snakeBody=[{x:9,y:10},{x:8,y:10},{x:7,y:10}];snakeDir={x:1,y:0};snakeNext={x:1,y:0};snakePoints=0;snakeEnded=false;snakePlaceFood();$('snakeStart').textContent='ابدئي اللعب ▶️';$('snakeMessage').textContent='جاهزة لجولة جديدة؟ 💗';drawSnake()}
+document.addEventListener('keydown',e=>{if(!$('snake').classList.contains('active'))return;const keys={ArrowUp:[0,-1],w:[0,-1],W:[0,-1],ArrowDown:[0,1],s:[0,1],S:[0,1],ArrowLeft:[-1,0],a:[-1,0],A:[-1,0],ArrowRight:[1,0],d:[1,0],D:[1,0]};if(keys[e.key]){e.preventDefault();setSnakeDirection(...keys[e.key])}});
+snakeBestScore=Number(localStorage.getItem('daadSnakeBest')||0);snakePlaceFood();drawSnake();
+
 colorGame();updateScore();
 </script></body></html>
