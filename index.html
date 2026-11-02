@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7c9df"><meta name="description" content="مملكة دعد: عالم مرح لتعلم الحروف والأرقام واللعب">
+<title>مملكة دعد 👑</title>
+<style>
+:root{--pink:#f7c9df;--purple:#b9a4e8;--blue:#bde7f3;--yellow:#ffe59b;--ink:#514568;--paper:#fffafc;--green:#c8edcf}
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#fff7fb,#f2f7ff);color:var(--ink)}
+header{padding:18px 5%;background:#ffffffc9;display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:0;z-index:5;backdrop-filter:blur(10px);border-bottom:2px solid #f5e5f0}
+.logo{font-size:clamp(22px,4vw,34px);font-weight:900}.stars{font-size:22px}
+main{max-width:1100px;margin:auto;padding:22px 16px 60px}.hero{background:linear-gradient(120deg,#ffe0ec,#e6e0ff 55%,#dff5fb);border-radius:30px;padding:26px;display:grid;grid-template-columns:1.3fr .7fr;align-items:center;gap:16px;box-shadow:0 12px 30px #8e75a51a}
+h1{font-size:clamp(30px,5vw,48px);margin:0 0 10px}.hero p{font-size:20px;line-height:1.8;margin:0 0 18px}.mascot{display:flex;align-items:center;justify-content:center;gap:4px;font-size:clamp(65px,12vw,120px);filter:drop-shadow(0 8px 5px #8d6b8b33)}
+button{font:inherit;border:0;cursor:pointer;border-radius:18px;padding:13px 18px;background:white;color:var(--ink);font-weight:bold;box-shadow:0 4px 0 #d9cadd;transition:.15s}button:hover{transform:translateY(-2px)}button:active{transform:translateY(2px);box-shadow:none}.primary{background:#9b83d5;color:white}.section-title{font-size:27px;margin:30px 4px 14px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.tile{min-height:130px;border-radius:24px;padding:18px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:20px}.tile span{font-size:42px}.tile:nth-child(1){background:#ffe3ef}.tile:nth-child(2){background:#e7e1ff}.tile:nth-child(3){background:#dcf3fa}.tile:nth-child(4){background:#fff0c7}.tile:nth-child(5){background:#dff3df}.tile:nth-child(6){background:#f4e4ff}
+.panel{display:none;margin-top:22px;background:white;border-radius:26px;padding:20px;box-shadow:0 8px 24px #685b7714}.panel.active{display:block}.panel h2{margin-top:0}.letters{display:grid;grid-template-columns:repeat(7,1fr);gap:9px}.letter,.number{background:#f3edff;border-radius:16px;min-height:65px;font-size:34px;color:#64518b;box-shadow:none}.letter.selected,.number.selected{background:#ffe0ec;outline:3px solid #e8a9c7}.learn-card{margin:18px auto 0;max-width:440px;text-align:center;background:#fff5fa;border-radius:24px;padding:22px}.big{font-size:100px;line-height:1.2;font-weight:900}.learn-card p{font-size:22px}.numbers{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.number{font-size:48px;min-height:78px;background:#e5f5fb}.game-area{background:#fff7df;border-radius:22px;padding:20px;text-align:center;margin-top:12px}.choices{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:15px}.choice{font-size:30px;min-width:75px}.feedback{font-size:21px;font-weight:bold;min-height:34px;margin:10px}.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.pic{font-size:60px;background:#f6f1ff;border-radius:20px;padding:18px;text-align:center}.small{font-size:14px;color:#887d99}footer{text-align:center;padding:25px;color:#8b8197}
+@media(max-width:650px){.hero{grid-template-columns:1fr;text-align:center}.mascot{order:-1}.tiles{grid-template-columns:repeat(2,1fr)}.letters{grid-template-columns:repeat(5,1fr)}.gallery{grid-template-columns:repeat(2,1fr)}header{padding:12px 4%}}
+</style>
+</head>
+<body>
+<header><div class="logo">👑 مملكة دعد</div><div class="stars">⭐ <b id="score">0</b></div></header>
+<main>
+<section class="hero"><div><h1>أهلاً يا دعد! 🌸</h1><p>أنا ماشا وصديقي الدب، تعالي نلعب ونتعلم ونكتشف أشياء جميلة في مملكتك!</p><button class="primary" onclick="openPanel('letters')">هيا نتعلم! ✨</button></div><div class="mascot" aria-label="ماشا والدب">👧🏻 🧸</div></section>
+<h2 class="section-title">ماذا نلعب اليوم؟</h2>
+<section class="tiles">
+<button class="tile" onclick="openPanel('letters')"><span>🔤</span>حديقة الحروف</button>
+<button class="tile" onclick="openPanel('numbers')"><span>🔢</span>مملكة الأرقام</button>
+<button class="tile" onclick="openPanel('game')"><span>🧩</span>ألعاب دعد</button>
+<button class="tile" onclick="openPanel('colors')"><span>🎨</span>ألواني الجميلة</button>
+<button class="tile" onclick="openPanel('gallery')"><span>🦋</span>معرض الصور</button>
+<button class="tile" onclick="openPanel('achievements')"><span>🏆</span>نجومي وإنجازاتي</button>
+</section>
+<section id="letters" class="panel"><h2>🌷 حديقة الحروف العربية</h2><p>اختاري حرفاً، ثم اضغطي على زر الاستماع.</p><div class="letters" id="letterGrid"></div><div class="learn-card"><div class="big" id="letterBig">أ</div><p id="letterWord">أ مثل أسد 🦁</p><button class="primary" onclick="speak(document.getElementById('letterBig').textContent)">🔊 اسمعي الحرف</button></div></section>
+<section id="numbers" class="panel"><h2>🌈 مملكة الأرقام من ١ إلى ١٠</h2><div class="numbers" id="numberGrid"></div><div class="learn-card"><div class="big" id="numberBig">١</div><p id="countThings">🍓</p><button class="primary" onclick="speak(document.getElementById('numberBig').textContent)">🔊 اسمعي الرقم</button></div></section>
+<section id="game" class="panel"><h2>🧠 لعبة اختاري الحرف</h2><p>ما الحرف الذي تبدأ به كلمة <b id="gameWord">تفاحة 🍎</b>؟</p><div class="game-area"><div class="choices" id="gameChoices"></div><div class="feedback" id="feedback"></div><button class="primary" onclick="newGame()">سؤال جديد 🎲</button></div></section>
+<section id="colors" class="panel"><h2>🎨 لعبة الألوان</h2><p>اضغطي على اللون الذي أطلبه منك.</p><div class="game-area"><div id="colorAsk" style="font-size:24px;font-weight:bold">أين اللون الأحمر؟</div><div class="choices" id="colorChoices"></div><div class="feedback" id="colorFeedback"></div></div></section>
+<section id="gallery" class="panel"><h2>🦋 معرض دعد الجميل</h2><div class="gallery"><div class="pic">🦋<div class="small">فراشة</div></div><div class="pic">🐱<div class="small">قطة</div></div><div class="pic">🌷<div class="small">وردة</div></div><div class="pic">🍓<div class="small">فراولة</div></div><div class="pic">🐰<div class="small">أرنب</div></div><div class="pic">🌈<div class="small">قوس قزح</div></div><div class="pic">🐻<div class="small">دب</div></div><div class="pic">🐥<div class="small">كتكوت</div></div><div class="pic">⭐<div class="small">نجمة</div></div></div></section>
+<section id="achievements" class="panel"><h2>🏆 نجومي يا دعد</h2><p style="font-size:22px">جمعتِ حتى الآن <b id="scoreBig">0</b> نجمة ⭐</p><p>كلما تعلمتِ حرفاً أو أجبتِ إجابة صحيحة، تحصلين على نجمة جديدة!</p></section>
+<footer>صُنعت بحب لدعد 💗 <div class="small">مملكة دعد — نسخة أولى تعليمية، تعمل دون حساب أو إرسال بيانات.</div></footer>
+</main>
+<script>
+const letters=[['أ','أسد','🦁'],['ب','بطة','🦆'],['ت','تفاحة','🍎'],['ث','ثعلب','🦊'],['ج','جمل','🐪'],['ح','حصان','🐴'],['خ','خروف','🐑'],['د','دب','🐻'],['ذ','ذرة','🌽'],['ر','ريشة','🪶'],['ز','زهرة','🌸'],['س','سمكة','🐟'],['ش','شمس','☀️'],['ص','صقر','🦅'],['ض','ضفدع','🐸'],['ط','طائرة','✈️'],['ظ','ظرف','✉️'],['ع','عنب','🍇'],['غ','غيمة','☁️'],['ف','فراشة','🦋'],['ق','قمر','🌙'],['ك','كتاب','📘'],['ل','ليمون','🍋'],['م','موز','🍌'],['ن','نجمة','⭐'],['هـ','هلال','🌙'],['و','وردة','🌹'],['ي','يد','✋']];
+let score=Number(localStorage.getItem('daadStars')||0),currentLetter=letters[0];
+const $=id=>document.getElementById(id);
+function updateScore(){ $('score').textContent=score;$('scoreBig').textContent=score;localStorage.setItem('daadStars',score)}
+function star(){score++;updateScore()}
+function speak(t){if('speechSynthesis'in window){speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='ar-SA';u.rate=.75;speechSynthesis.speak(u)}}
+function openPanel(id){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');$(id).scrollIntoView({behavior:'smooth',block:'start'});if(id==='game')newGame()}
+function chooseLetter(i){currentLetter=letters[i];$('letterBig').textContent=currentLetter[0];$('letterWord').textContent=currentLetter[0]+' مثل '+currentLetter[1]+' '+currentLetter[2];document.querySelectorAll('.letter').forEach((b,j)=>b.classList.toggle('selected',i===j));star()}
+letters.forEach((l,i)=>{let b=document.createElement('button');b.className='letter';b.textContent=l[0];b.onclick=()=>chooseLetter(i);$('letterGrid').appendChild(b)});
+const nums=['١','٢','٣','٤','٥','٦','٧','٨','٩','١٠'],things=['🍓','🍓🍓','🍓🍓🍓','🍓🍓🍓🍓','🍓🍓🍓🍓🍓','🦋🦋🦋🦋🦋🦋','⭐'.repeat(7),'🌸'.repeat(8),'🐥'.repeat(9),'🍎'.repeat(10)];
+nums.forEach((n,i)=>{let b=document.createElement('button');b.className='number';b.textContent=n;b.onclick=()=>{$('numberBig').textContent=n;$('countThings').textContent=things[i];star()};$('numberGrid').appendChild(b)});
+function newGame(){let target=Math.floor(Math.random()*letters.length);let opts=new Set([target]);while(opts.size<3)opts.add(Math.floor(Math.random()*letters.length));$('gameWord').textContent=letters[target][1]+' '+letters[target][2];$('feedback').textContent='';$('gameChoices').innerHTML='';[...opts].sort(()=>Math.random()-.5).forEach(i=>{let b=document.createElement('button');b.className='choice';b.textContent=letters[i][0];b.onclick=()=>{if(i===target){$('feedback').textContent='أحسنتِ يا دعد! ⭐';star();speak('أحسنت يا دعد')}else $('feedback').textContent='حاولي مرة أخرى يا بطلة 💗'};$('gameChoices').appendChild(b)})}
+const colors=[['الأحمر','🔴'],['الأزرق','🔵'],['الأصفر','🟡'],['الأخضر','🟢']];
+function colorGame(){let t=Math.floor(Math.random()*4);$('colorAsk').textContent='أين اللون '+colors[t][0]+'؟';$('colorFeedback').textContent='';$('colorChoices').innerHTML='';colors.forEach((c,i)=>{let b=document.createElement('button');b.className='choice';b.textContent=c[1];b.onclick=()=>{if(i===t){$('colorFeedback').textContent='رائعة! ⭐';star();colorGame()}else $('colorFeedback').textContent='جربي لوناً آخر 🌷'};$('colorChoices').appendChild(b)})}
+colorGame();updateScore();
+</script></body></html>
